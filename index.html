@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Bloqueio — SOC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #060a10;
+      --panel:     #0c1118;
+      --panel-2:   #101820;
+      --border:    #1c2535;
+      --border-s:  #243042;
+      --text:      #e8edf5;
+      --muted:     #7a8ba0;
+      --accent:    #22c55e;
+      --cyan:      #38bdf8;
+      --red:       #ef4444;
+      --amber:     #f59e0b;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-body: 'Inter', sans-serif;
+      --radius:    12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Login ── */
+    #screen-login {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-card {
+      background: var(--panel);
+      border: 1px solid var(--border-s);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    }
+
+    .login-header-bar {
+      width: 60px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--cyan));
+      margin-bottom: 20px;
+    }
+
+    .login-card h2 {
+      font-family: var(--font-mono);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .login-card h2 span { color: var(--cyan); }
+
+    .login-card p {
+      font-size: 0.825rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .login-shield {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(56,189,248,0.08);
+      border: 1px solid rgba(56,189,248,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    /* ── App ── */
+    #screen-app {
+      display: none;
+      width: 100%;
+      max-width: 680px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Header ── */
+    .header { margin-bottom: 28px; }
+    .header-bar { width: 80px; height: 3px; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--cyan)); margin-bottom: 16px; }
+    .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .header h1 { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+    .header h1 span { color: var(--cyan); }
+    .header p { font-size: 0.825rem; color: var(--muted); margin-top: 6px; }
+
+    .logout-btn {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-s);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .logout-btn:hover { color: #f87171; border-color: rgba(239,68,68,0.4); }
+
+    /* ── Card principal ── */
+    .main-card {
+      background: var(--panel);
+      border: 1px solid var(--border-s);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Inputs ── */
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-s);
+      background: #07111e;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input::placeholder, textarea::placeholder { color: #3a4d62; }
+
+    input:focus, textarea:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(56,189,248,0.1);
+    }
+
+    textarea { resize: vertical; min-height: 180px; line-height: 1.7; }
+
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+
+    .field-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      margin-top: 5px;
+    }
+
+    /* ── Contador ── */
+    .counter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+
+    .ip-counter {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .ip-counter.has-ips { color: var(--cyan); }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 13px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      letter-spacing: 0.02em;
+      margin-top: 20px;
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .btn-login {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 13px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-login:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-login:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    /* ── Status / Alerts ── */
+    .status-msg {
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      min-height: 18px;
+      margin-top: 10px;
+      color: var(--cyan);
+    }
+
+    .alert {
+      display: none;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.825rem;
+      font-family: var(--font-mono);
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    .alert-error   { background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.25);  color: #f87171; }
+    .alert-success { background: rgba(34,197,94,0.08);  border: 1px solid rgba(34,197,94,0.25);  color: #4ade80; }
+    .alert-warning { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); color: #fbbf24; }
+
+    /* ── Progress ── */
+    .progress-wrap { display: none; margin-top: 14px; }
+    .progress-track { width: 100%; height: 4px; border-radius: 999px; background: var(--border); }
+    .progress-fill  { height: 4px; border-radius: 999px; background: var(--cyan); transition: width 0.4s ease; }
+    .progress-lbl   { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-top: 5px; }
+
+    /* ── Resultado detalhado ── */
+    .result-list { margin-top: 16px; display: none; }
+    .result-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+
+    .result-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+    }
+
+    .result-item:last-child { margin-bottom: 0; }
+
+    .result-ip {
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+    .pill-ok  { background: rgba(34,197,94,0.1);  color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
+    .pill-ok .dot  { background: #22c55e; box-shadow: 0 0 5px rgba(34,197,94,0.7); }
+    .pill-err { background: rgba(239,68,68,0.1);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .pill-err .dot { background: var(--red); box-shadow: 0 0 5px rgba(239,68,68,0.7); }
+
+    /* ── Histórico local ── */
+    .hist-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+
+    .hist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .hist-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+    .hist-clear {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(239,68,68,0.3);
+      background: transparent;
+      color: #f87171;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .hist-clear:hover { border-color: var(--red); }
+
+    .hist-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hist-item:last-child { border-bottom: none; }
+
+    .hist-ip   { font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyan); font-weight: 600; flex: 1; }
+    .hist-time { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
+
+    .empty-hist { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; padding: 20px 0; }
+
+    /* ── Login error ── */
+    .login-error { display: none; font-size: 0.78rem; color: #f87171; font-family: var(--font-mono); margin-top: 8px; text-align: center; }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 28px 20px; }
+      .main-card  { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── TELA DE LOGIN ── -->
+  <div id="screen-login">
+    <div class="login-card">
+      <div class="login-header-bar"></div>
+      <div class="login-shield">🛡️</div>
+      <h2>Portal de <span>Bloqueio</span></h2>
+      <p>Acesso restrito à equipe de plantão do SOC.</p>
+
+      <div class="field">
+        <label for="login-senha">Senha de acesso</label>
+        <input id="login-senha" type="password" placeholder="Digite a senha" autocomplete="current-password" />
+      </div>
+
+      <button class="btn-login" id="btn-login" onclick="fazerLogin()">Entrar</button>
+      <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+    </div>
+  </div>
+
+  <!-- ── TELA DO APP ── -->
+  <div id="screen-app">
+
+    <div class="header">
+      <div class="header-bar"></div>
+      <div class="header-top">
+        <div>
+          <h1>Portal de <span>Bloqueio</span></h1>
+          <p>Adicione IPs à feed de bloqueio. Os firewalls serão atualizados automaticamente.</p>
+        </div>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="main-card">
+
+      <div class="field">
+        <div class="counter-row">
+          <label for="ip-input" style="margin-bottom:0;">IPs para bloquear</label>
+          <span class="ip-counter" id="ip-counter">0 IPs</span>
+        </div>
+        <textarea
+          id="ip-input"
+          placeholder="Cole os IPs aqui, um por linha:
+
+192.168.1.100
+45.33.32.156
+185.220.101.47"
+        ></textarea>
+        <div class="field-hint">Um IP por linha. Máximo de 100 IPs por envio.</div>
+      </div>
+
+      <button class="btn-primary" id="btn-enviar" onclick="enviar()">
+        🚫 Bloquear IPs
+      </button>
+
+      <div class="progress-wrap" id="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <div class="progress-lbl" id="progress-lbl">Enviando para a feed...</div>
+      </div>
+
+      <div class="alert alert-error"   id="alert-error"></div>
+      <div class="alert alert-success" id="alert-success"></div>
+      <div class="alert alert-warning" id="alert-warning"></div>
+
+      <!-- Resultado por IP -->
+      <div class="result-list" id="result-list">
+        <div class="result-title">Resultado por IP</div>
+        <div id="result-items"></div>
+      </div>
+
+    </div>
+
+    <!-- Histórico local -->
+    <div class="hist-card">
+      <div class="hist-header">
+        <span class="hist-title">Histórico da sessão</span>
+        <button class="hist-clear" onclick="limparHistorico()">Limpar</button>
+      </div>
+      <div id="hist-list">
+        <div class="empty-hist">Nenhum IP bloqueado ainda.</div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  const WORKER_URL = "https://feed.vitormartinsjosemaria-7ed.workers.dev/"; //
+  const LS_HIST    = "soc_bloqueio_hist";
+
+  let senhaAtual = "";
+
+  /* ── Login ── */
+  function fazerLogin() {
+    const senha = document.getElementById("login-senha").value.trim();
+    if (!senha) return;
+
+    // A senha só é validada pelo Worker na hora do envio.
+    // Aqui apenas guardamos para usar nas requisições.
+    senhaAtual = senha;
+    document.getElementById("screen-login").style.display = "none";
+    document.getElementById("screen-app").style.display   = "block";
+    document.getElementById("login-error").style.display  = "none";
+    document.body.style.alignItems = "flex-start";
+    renderHistorico();
+  }
+
+  function logout() {
+    senhaAtual = "";
+    document.getElementById("login-senha").value          = "";
+    document.getElementById("screen-login").style.display = "flex";
+    document.getElementById("screen-app").style.display   = "none";
+    document.body.style.alignItems = "center";
+    esconderAlertas();
+    document.getElementById("ip-input").value = "";
+    document.getElementById("ip-counter").textContent = "0 IPs";
+    document.getElementById("result-list").style.display = "none";
+    document.getElementById("progress-wrap").style.display = "none";
+  }
+
+  // Enter no campo de senha
+  document.getElementById("login-senha").addEventListener("keydown", e => {
+    if (e.key === "Enter") fazerLogin();
+  });
+
+  /* ── Contador de IPs ── */
+  document.getElementById("ip-input").addEventListener("input", () => {
+    const ips = extrairIps();
+    const el  = document.getElementById("ip-counter");
+    el.textContent = ips.length + " IP" + (ips.length !== 1 ? "s" : "") + " detectado" + (ips.length !== 1 ? "s" : "");
+    el.className   = "ip-counter" + (ips.length > 0 ? " has-ips" : "");
+  });
+
+  /* ── Enviar ── */
+  async function enviar() {
+    const ips = extrairIps();
+
+    esconderAlertas();
+    document.getElementById("result-list").style.display = "none";
+
+    if (!ips.length) {
+      mostrarAlerta("error", "Nenhum IP válido encontrado. Verifique a lista.");
+      return;
+    }
+
+    if (ips.length > 100) {
+      mostrarAlerta("error", `Limite de 100 IPs por envio. Você informou ${ips.length}.`);
+      return;
+    }
+
+    const btn = document.getElementById("btn-enviar");
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    const pw   = document.getElementById("progress-wrap");
+    const pf   = document.getElementById("progress-fill");
+    const pl   = document.getElementById("progress-lbl");
+    pw.style.display = "block";
+    pf.style.width   = "15%";
+    pl.textContent   = `Enviando ${ips.length} IP${ips.length > 1 ? "s" : ""} para a feed...`;
+
+    try {
+      const r = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senha: senhaAtual, entries: ips.join("\n") })
+      });
+
+      pf.style.width = "90%";
+      const data = await r.json();
+
+      // Senha errada — volta para login
+      if (r.status === 401) {
+        document.getElementById("login-error").style.display = "block";
+        logout();
+        return;
+      }
+
+      if (!r.ok) {
+        mostrarAlerta("error", data.error || "Erro ao enviar para a feed.");
+        return;
+      }
+
+      pf.style.width = "100%";
+      pl.textContent = "Concluído.";
+      setTimeout(() => { pw.style.display = "none"; }, 800);
+
+      const { success, failed, results } = data;
+
+      // Alerta principal
+      if (failed === 0) {
+        mostrarAlerta("success", `✅ ${success} IP${success !== 1 ? "s" : ""} bloqueado${success !== 1 ? "s" : ""} com sucesso! Os firewalls serão atualizados em breve.`);
+      } else if (success === 0) {
+        mostrarAlerta("error", `❌ Nenhum IP foi bloqueado. Verifique a conexão com a feed.`);
+      } else {
+        mostrarAlerta("warning", `⚠️ ${success} IP${success !== 1 ? "s" : ""} bloqueado${success !== 1 ? "s" : ""} com sucesso, ${failed} falharam.`);
+      }
+
+      // Resultado por IP
+      if (results?.length) {
+        const itemsEl = document.getElementById("result-items");
+        itemsEl.innerHTML = results.map(r =>
+          `<div class="result-item">
+            <span class="result-ip">${esc(r.ip)}</span>
+            ${r.ok
+              ? `<span class="pill pill-ok"><span class="dot"></span>Bloqueado</span>`
+              : `<span class="pill pill-err"><span class="dot"></span>${esc(r.error || "Erro")}</span>`
+            }
+          </div>`
+        ).join("");
+        document.getElementById("result-list").style.display = "block";
+      }
+
+      // Salvar no histórico apenas os que tiveram sucesso
+      const okIps = (results || []).filter(r => r.ok).map(r => r.ip);
+      if (okIps.length) salvarHistorico(okIps);
+
+      // Limpar campo
+      document.getElementById("ip-input").value = "";
+      document.getElementById("ip-counter").textContent = "0 IPs";
+
+    } catch {
+      mostrarAlerta("error", "Não foi possível conectar ao Worker.");
+      pw.style.display = "none";
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = "🚫 Bloquear IPs";
+    }
+  }
+
+  /* ── Histórico ── */
+  function getHistorico() {
+    try { return JSON.parse(localStorage.getItem(LS_HIST) || "[]"); } catch { return []; }
+  }
+
+  function salvarHistorico(ips) {
+    const hist = getHistorico();
+    const now  = Date.now();
+    ips.forEach(ip => hist.unshift({ ip, ts: now }));
+    localStorage.setItem(LS_HIST, JSON.stringify(hist.slice(0, 200)));
+    renderHistorico();
+  }
+
+  function renderHistorico() {
+    const hist = getHistorico();
+    const el   = document.getElementById("hist-list");
+
+    if (!hist.length) {
+      el.innerHTML = '<div class="empty-hist">Nenhum IP bloqueado ainda.</div>';
+      return;
+    }
+
+    el.innerHTML = hist.map(h => {
+      const dt   = new Date(h.ts);
+      const date = dt.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+      const time = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      return `<div class="hist-item">
+        <span class="hist-ip">${esc(h.ip)}</span>
+        <span class="pill pill-ok" style="font-size:0.65rem;padding:2px 7px;"><span class="dot"></span>Bloqueado</span>
+        <span class="hist-time">${date} ${time}</span>
+      </div>`;
+    }).join("");
+  }
+
+  function limparHistorico() {
+    if (!confirm("Limpar o histórico da sessão?")) return;
+    localStorage.removeItem(LS_HIST);
+    renderHistorico();
+  }
+
+  /* ── Helpers ── */
+  function extrairIps() {
+    return document.getElementById("ip-input").value
+      .split(/[\n,;\s]+/)
+      .map(s => s.trim())
+      .filter(isValidIp)
+      .slice(0, 100);
+  }
+
+  function mostrarAlerta(tipo, msg) {
+    esconderAlertas();
+    const el = document.getElementById("alert-" + tipo);
+    el.textContent    = msg;
+    el.style.display  = "block";
+  }
+
+  function esconderAlertas() {
+    ["error","success","warning"].forEach(t => {
+      document.getElementById("alert-" + t).style.display = "none";
+    });
+  }
+
+  function isValidIp(ip) {
+    const v4 = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+    const v6 = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|:((:[0-9a-fA-F]{1,4}){1,7})|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,3}(:[0-9a-fA-F]{1,4}){1,4})|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/;
+    return v4.test(ip) || v6.test(ip);
+  }
+
+  function esc(t) {
+    return String(t || "")
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+</script>
+</body>
+</html>
