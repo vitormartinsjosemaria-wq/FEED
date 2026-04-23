@@ -458,24 +458,50 @@
   </div>
 
 <script>
-  const WORKER_URL = "https://feed.vitormartinsjosemaria-7ed.workers.dev/"; //
+  const WORKER_URL = "https://feed.vitormartinsjosemaria-7ed.workers.dev/"; // ← substitua pela URL do seu Worker
   const LS_HIST    = "soc_bloqueio_hist";
 
   let senhaAtual = "";
 
   /* ── Login ── */
-  function fazerLogin() {
+  async function fazerLogin() {
     const senha = document.getElementById("login-senha").value.trim();
     if (!senha) return;
 
-    // A senha só é validada pelo Worker na hora do envio.
-    // Aqui apenas guardamos para usar nas requisições.
-    senhaAtual = senha;
-    document.getElementById("screen-login").style.display = "none";
-    document.getElementById("screen-app").style.display   = "block";
-    document.getElementById("login-error").style.display  = "none";
-    document.body.style.alignItems = "flex-start";
-    renderHistorico();
+    const btn = document.getElementById("btn-login");
+    btn.disabled    = true;
+    btn.textContent = "Verificando...";
+
+    try {
+      const r = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senha, action: "auth" })
+      });
+
+      const data = await r.json();
+
+      if (!r.ok || !data.ok) {
+        document.getElementById("login-error").style.display = "block";
+        document.getElementById("login-senha").value = "";
+        return;
+      }
+
+      // Senha validada pelo Worker — libera acesso
+      senhaAtual = senha;
+      document.getElementById("screen-login").style.display = "none";
+      document.getElementById("screen-app").style.display   = "block";
+      document.getElementById("login-error").style.display  = "none";
+      document.body.style.alignItems = "flex-start";
+      renderHistorico();
+
+    } catch {
+      document.getElementById("login-error").textContent = "Não foi possível conectar. Tente novamente.";
+      document.getElementById("login-error").style.display = "block";
+    } finally {
+      btn.disabled    = false;
+      btn.textContent = "Entrar";
+    }
   }
 
   function logout() {
