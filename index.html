@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/jLbN9DMj/181534.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal de Bloqueio — SOC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,11 +66,11 @@
     .login-shield { width: 56px; height: 56px; border-radius: 50%; background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.5rem; }
     .login-card h2 { font-family: var(--font-mono); font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; }
     .login-card h2 span { color: var(--cyan); }
-    .login-card p { font-size: 0.825rem; color: var(--muted); margin-bottom: 28px; }
+    .login-card p { font-size: 0.825rem; color: var(--muted); margin-bottom: 24px; }
     .login-error { display: none; font-size: 0.78rem; color: #f87171; font-family: var(--font-mono); margin-top: 8px; text-align: center; }
 
     /* ── App ── */
-    #screen-app { display: none; width: 100%; max-width: 720px; position: relative; z-index: 1; }
+    #screen-app { display: none; width: 100%; max-width: 760px; position: relative; z-index: 1; }
 
     /* ── Header ── */
     .header { margin-bottom: 24px; }
@@ -80,6 +79,11 @@
     .header h1 { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
     .header h1 span { color: var(--cyan); }
     .header p { font-size: 0.825rem; color: var(--muted); margin-top: 6px; }
+
+    .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .analyst-badge { font-family: var(--font-mono); font-size: 0.72rem; color: var(--cyan); background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.2); padding: 3px 10px; border-radius: 999px; }
+    .logout-btn { font-family: var(--font-body); font-size: 0.72rem; font-weight: 500; padding: 4px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-s); background: transparent; color: var(--muted); cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+    .logout-btn:hover { color: #f87171; border-color: rgba(239,68,68,0.4); }
 
     /* ── Tabs ── */
     .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
@@ -101,34 +105,26 @@
     }
     input::placeholder, textarea::placeholder { color: #3a4d62; }
     input:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(56,189,248,0.1); }
-    textarea { resize: vertical; min-height: 160px; line-height: 1.7; }
+    textarea { resize: vertical; min-height: 150px; line-height: 1.7; }
 
     .field { margin-bottom: 16px; }
     .field-hint { font-size: 0.72rem; color: var(--muted); font-family: var(--font-mono); margin-top: 5px; }
-
     .counter-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
     .ip-counter { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
     .ip-counter.has-ips { color: var(--cyan); }
 
     /* ── Buttons ── */
-    .btn-primary { width: 100%; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; padding: 13px; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); color: #fff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; letter-spacing: 0.02em; margin-top: 4px; }
+    .btn-primary { width: 100%; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; padding: 13px; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); color: #fff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; margin-top: 4px; }
     .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-primary:active { transform: translateY(0); }
     .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-    .btn-block { font-family: var(--font-body); font-size: 0.85rem; font-weight: 700; padding: 10px 24px; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%); color: #fff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; display: flex; align-items: center; gap: 7px; }
+    .btn-block { font-family: var(--font-body); font-size: 0.85rem; font-weight: 700; padding: 10px 22px; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, #991b1b 0%, #dc2626 100%); color: #fff; cursor: pointer; transition: opacity 0.15s, transform 0.1s; display: inline-flex; align-items: center; gap: 7px; }
     .btn-block:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-block:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
-    .btn-outline { font-family: var(--font-body); font-size: 0.8rem; font-weight: 500; padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-s); background: transparent; color: var(--muted); cursor: pointer; transition: color 0.15s; }
-    .btn-outline:hover { color: var(--text); }
-
-    .logout-btn { font-family: var(--font-body); font-size: 0.72rem; font-weight: 500; padding: 5px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-s); background: transparent; color: var(--muted); cursor: pointer; white-space: nowrap; transition: color 0.15s, border-color 0.15s; flex-shrink: 0; margin-top: 4px; }
-    .logout-btn:hover { color: #f87171; border-color: rgba(239,68,68,0.4); }
-
     /* ── Cards ── */
     .main-card { background: var(--panel); border: 1px solid var(--border-s); border-radius: var(--radius); padding: 24px; margin-bottom: 14px; }
-    .hist-card  { background: var(--panel); border: 1px solid var(--border);   border-radius: var(--radius); padding: 20px 24px; }
 
     /* ── Alerts ── */
     .alert { display: none; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.825rem; font-family: var(--font-mono); margin-top: 12px; line-height: 1.5; }
@@ -154,60 +150,69 @@
     .pill-ok    { background: rgba(34,197,94,0.1);  color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
     .pill-ok .dot    { background: var(--accent); box-shadow: 0 0 5px rgba(34,197,94,0.7); }
     .pill-err   { background: rgba(239,68,68,0.1);  color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
-    .pill-err .dot   { background: var(--red); box-shadow: 0 0 5px rgba(239,68,68,0.7); }
+    .pill-err .dot   { background: var(--red); }
 
-    /* ── Análise resultado ── */
+    /* ── Análise ── */
     .analyze-result { display: none; margin-top: 16px; }
-
-    .analyze-card {
-      background: var(--panel-2);
-      border: 1px solid var(--border-s);
-      border-radius: var(--radius);
-      padding: 20px;
-    }
-
+    .analyze-card { background: var(--panel-2); border: 1px solid var(--border-s); border-radius: var(--radius); padding: 20px; }
     .analyze-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
     .analyze-ip { font-family: var(--font-mono); font-size: 1.2rem; font-weight: 700; color: var(--cyan); }
-
     .analyze-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
     .analyze-item { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; }
     .analyze-lbl  { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
     .analyze-val  { font-family: var(--font-mono); font-size: 0.875rem; color: var(--text); font-weight: 500; }
-
     .score-wrap  { display: flex; align-items: center; gap: 8px; }
     .score-track { flex: 1; height: 5px; border-radius: 999px; background: #111d2e; }
     .score-fill  { height: 5px; border-radius: 999px; transition: width 0.5s ease; }
-
     .block-action { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 14px; border-top: 1px solid var(--border); }
     .block-note   { font-size: 0.8rem; color: var(--muted); font-family: var(--font-mono); }
-
     .blocked-badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-sm); background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); color: #4ade80; font-family: var(--font-mono); font-size: 0.825rem; font-weight: 600; }
 
-    /* ── Resultado por item (bloqueio em lote) ── */
+    /* ── Resultado lote ── */
     .result-list  { margin-top: 14px; display: none; }
     .result-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
     .result-item  { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius-sm); margin-bottom: 6px; border: 1px solid var(--border); background: var(--panel-2); }
     .result-item:last-child { margin-bottom: 0; }
     .result-ip { font-family: var(--font-mono); font-size: 0.825rem; font-weight: 700; color: var(--text); flex: 1; }
 
-    /* ── Histórico ── */
-    .hist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    /* ── Histórico KV ── */
+    .hist-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-top: 14px; }
+    .hist-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
     .hist-title  { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-    .hist-clear  { font-family: var(--font-body); font-size: 0.72rem; padding: 3px 10px; border-radius: var(--radius-sm); border: 1px solid rgba(239,68,68,0.3); background: transparent; color: #f87171; cursor: pointer; transition: border-color 0.15s; }
-    .hist-clear:hover { border-color: var(--red); }
-    .hist-item  { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-    .hist-item:last-child { border-bottom: none; }
-    .hist-ip   { font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyan); font-weight: 600; flex: 1; }
-    .hist-time { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); white-space: nowrap; }
-    .empty-hist { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; padding: 20px 0; }
+    .hist-actions { display: flex; gap: 8px; align-items: center; }
 
+    .btn-refresh { font-family: var(--font-body); font-size: 0.72rem; padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-s); background: transparent; color: var(--muted); cursor: pointer; transition: color 0.15s; }
+    .btn-refresh:hover { color: var(--cyan); border-color: rgba(56,189,248,0.4); }
+
+    .hist-search { font-family: var(--font-mono); font-size: 0.78rem; padding: 5px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-s); background: #07111e; color: var(--text); outline: none; width: 180px; }
+    .hist-search:focus { border-color: var(--cyan); }
+
+    .hist-meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-bottom: 10px; }
+
+    /* Tabela histórico */
+    .hist-table-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    thead th { font-family: var(--font-body); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 9px 14px; text-align: left; background: var(--panel-2); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--panel-2); }
+    tbody td { font-family: var(--font-mono); font-size: 0.8rem; padding: 9px 14px; color: var(--text); vertical-align: middle; }
+    .td-ip { font-weight: 700; color: var(--cyan); }
+    .td-analyst { color: var(--muted); }
+    .td-time { color: var(--muted); white-space: nowrap; }
+
+    .empty-hist { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); text-align: center; padding: 28px 0; }
     .divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+    /* ── Login field ── */
+    .login-field-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
 
     @media (max-width: 540px) {
       .login-card   { padding: 28px 20px; }
       .main-card    { padding: 18px; }
       .analyze-grid { grid-template-columns: 1fr 1fr; }
-      .tabs .tab    { padding: 8px 12px 10px; font-size: 0.8rem; }
+      .tabs .tab    { padding: 8px 10px 10px; font-size: 0.8rem; }
+      .hist-search  { width: 120px; }
     }
   </style>
 </head>
@@ -220,10 +225,18 @@
       <div class="login-shield">🛡️</div>
       <h2>Portal de <span>Bloqueio</span></h2>
       <p>Acesso restrito à equipe de plantão do SOC.</p>
-      <div class="field">
-        <label for="login-senha">Senha de acesso</label>
-        <input id="login-senha" type="password" placeholder="Digite a senha" autocomplete="current-password" />
+
+      <div class="login-field-group">
+        <div class="field">
+          <label for="login-nome">Seu nome / identificação</label>
+          <input id="login-nome" type="text" placeholder="Ex: Analista João" autocomplete="name" />
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label for="login-senha">Senha de acesso</label>
+          <input id="login-senha" type="password" placeholder="Digite a senha" autocomplete="current-password" />
+        </div>
       </div>
+
       <button class="btn-primary" id="btn-login" onclick="fazerLogin()">Entrar</button>
       <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
     </div>
@@ -237,15 +250,19 @@
       <div class="header-top">
         <div>
           <h1>Portal de <span>Bloqueio</span></h1>
-          <p>Analise e bloqueie IPs maliciosos direto na feed. Firewalls atualizados automaticamente.</p>
+          <p>Analise e bloqueie IPs maliciosos. Firewalls atualizados automaticamente.</p>
         </div>
-        <button class="logout-btn" onclick="logout()">Sair</button>
+        <div class="header-right">
+          <span class="analyst-badge" id="analyst-badge">👤 Analista</span>
+          <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
       </div>
     </div>
 
     <div class="tabs">
       <button class="tab active" onclick="switchTab('analisar')">🔍 Analisar IP</button>
       <button class="tab" onclick="switchTab('bloquear')">🚫 Bloquear em lote</button>
+      <button class="tab" onclick="switchTab('historico')">📋 Histórico</button>
     </div>
 
     <!-- ── ABA: ANALISAR ── -->
@@ -256,18 +273,14 @@
           <input id="ip-analyze" type="text" placeholder="Ex: 185.220.101.47" autocomplete="off" />
         </div>
         <button class="btn-primary" id="btn-analyze" onclick="analisarIp()">Analisar</button>
+        <div class="alert alert-error" id="analyze-error"></div>
 
-        <div class="alert alert-error"   id="analyze-error"></div>
-
-        <!-- Resultado da análise -->
         <div class="analyze-result" id="analyze-result">
           <div class="analyze-card">
-
             <div class="analyze-header">
               <span class="analyze-ip" id="r-ip">—</span>
               <span id="r-pill"></span>
             </div>
-
             <div class="analyze-grid">
               <div class="analyze-item">
                 <div class="analyze-lbl">Score AbuseIPDB</div>
@@ -286,23 +299,12 @@
                 <div class="analyze-val" id="r-isp">—</div>
               </div>
             </div>
-
             <div class="block-action" id="block-action">
               <span class="block-note" id="block-note"></span>
               <div id="block-btn-wrap"></div>
             </div>
-
           </div>
         </div>
-      </div>
-
-      <!-- Histórico -->
-      <div class="hist-card">
-        <div class="hist-header">
-          <span class="hist-title">IPs bloqueados na sessão</span>
-          <button class="hist-clear" onclick="limparHistorico()">Limpar</button>
-        </div>
-        <div id="hist-list-a"><div class="empty-hist">Nenhum IP bloqueado ainda.</div></div>
       </div>
     </div>
 
@@ -326,7 +328,7 @@
 
         <div class="progress-wrap" id="progress-wrap">
           <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-          <div class="progress-lbl" id="progress-lbl">Enviando para a feed...</div>
+          <div class="progress-lbl" id="progress-lbl"></div>
         </div>
 
         <div class="alert alert-error"   id="lote-error"></div>
@@ -339,32 +341,56 @@
           <div id="result-items"></div>
         </div>
       </div>
+    </div>
 
-      <!-- Histórico -->
+    <!-- ── ABA: HISTÓRICO ── -->
+    <div id="tab-historico" class="panel">
       <div class="hist-card">
         <div class="hist-header">
-          <span class="hist-title">IPs bloqueados na sessão</span>
-          <button class="hist-clear" onclick="limparHistorico()">Limpar</button>
+          <span class="hist-title">IPs bloqueados — todos os analistas</span>
+          <div class="hist-actions">
+            <input class="hist-search" type="text" placeholder="Buscar IP..." id="hist-search" oninput="filtrarHistorico()" />
+            <button class="btn-refresh" onclick="carregarHistorico()">↻ Atualizar</button>
+          </div>
         </div>
-        <div id="hist-list-b"><div class="empty-hist">Nenhum IP bloqueado ainda.</div></div>
+
+        <div class="hist-meta" id="hist-meta">Carregando...</div>
+
+        <div class="hist-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Analista</th>
+                <th>Data / Hora</th>
+              </tr>
+            </thead>
+            <tbody id="hist-tbody">
+              <tr><td colspan="3"><div class="empty-hist">Carregando histórico...</div></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
   </div><!-- /screen-app -->
 
 <script>
-  const WORKER_URL = "https://feed.vitormartinsjosemaria-7ed.workers.dev/"; // ← substitua pela URL do seu Worker
-  const LS_HIST    = "soc_bloqueio_hist";
-
-  let senhaAtual   = "";
-  let ipAnalisado  = null; // guarda o último resultado de análise
+  const WORKER_URL = "https://SEU-WORKER.workers.dev/"; // ← substitua pela URL do seu Worker
+  let senhaAtual  = "";
+  let analystName = "";
+  let ipAnalisado = null;
+  let histData    = [];
 
   /* ══════════════════════════════
      LOGIN / LOGOUT
   ══════════════════════════════ */
   async function fazerLogin() {
+    const nome  = document.getElementById("login-nome").value.trim();
     const senha = document.getElementById("login-senha").value.trim();
-    if (!senha) return;
+
+    if (!nome)  { mostrarLoginErro("Informe seu nome ou identificação."); return; }
+    if (!senha) { mostrarLoginErro("Digite a senha."); return; }
 
     const btn = document.getElementById("btn-login");
     btn.disabled    = true;
@@ -380,56 +406,62 @@
       const data = await r.json();
 
       if (!r.ok || !data.ok) {
-        document.getElementById("login-error").style.display = "block";
+        mostrarLoginErro("Senha incorreta. Tente novamente.");
         document.getElementById("login-senha").value = "";
         return;
       }
 
-      senhaAtual = senha;
+      senhaAtual  = senha;
+      analystName = nome;
+
+      document.getElementById("analyst-badge").textContent = "👤 " + nome;
       document.getElementById("screen-login").style.display = "none";
       document.getElementById("screen-app").style.display   = "block";
       document.getElementById("login-error").style.display  = "none";
       document.body.style.alignItems = "flex-start";
-      renderHistorico();
 
     } catch {
-      document.getElementById("login-error").textContent = "Não foi possível conectar. Tente novamente.";
-      document.getElementById("login-error").style.display = "block";
+      mostrarLoginErro("Não foi possível conectar. Tente novamente.");
     } finally {
       btn.disabled    = false;
       btn.textContent = "Entrar";
     }
   }
 
+  function mostrarLoginErro(msg) {
+    const el = document.getElementById("login-error");
+    el.textContent   = msg;
+    el.style.display = "block";
+  }
+
   function logout() {
     senhaAtual  = "";
+    analystName = "";
     ipAnalisado = null;
-    document.getElementById("login-senha").value          = "";
+    histData    = [];
+    document.getElementById("login-nome").value  = "";
+    document.getElementById("login-senha").value = "";
     document.getElementById("screen-login").style.display = "flex";
     document.getElementById("screen-app").style.display   = "none";
     document.body.style.alignItems = "center";
-    document.getElementById("ip-analyze").value = "";
+    document.getElementById("ip-analyze").value  = "";
     document.getElementById("analyze-result").style.display = "none";
-    document.getElementById("ip-input").value = "";
+    document.getElementById("ip-input").value    = "";
     document.getElementById("ip-counter").textContent = "0 IPs";
   }
 
-  document.getElementById("login-senha").addEventListener("keydown", e => {
-    if (e.key === "Enter") fazerLogin();
-  });
-
-  document.getElementById("ip-analyze").addEventListener("keydown", e => {
-    if (e.key === "Enter") analisarIp();
-  });
+  document.getElementById("login-senha").addEventListener("keydown", e => { if (e.key === "Enter") fazerLogin(); });
+  document.getElementById("ip-analyze").addEventListener("keydown", e => { if (e.key === "Enter") analisarIp(); });
 
   /* ══════════════════════════════
      TABS
   ══════════════════════════════ */
   function switchTab(name) {
     document.querySelectorAll(".tab").forEach((t, i) =>
-      t.classList.toggle("active", ["analisar","bloquear"][i] === name));
+      t.classList.toggle("active", ["analisar","bloquear","historico"][i] === name));
     document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
     document.getElementById("tab-" + name).classList.add("active");
+    if (name === "historico") carregarHistorico();
   }
 
   /* ══════════════════════════════
@@ -445,8 +477,8 @@
     res.style.display = "none";
     ipAnalisado = null;
 
-    if (!ip) { mostrarAlertaInline(err, "Digite um IP para analisar."); return; }
-    if (!isValidIp(ip)) { mostrarAlertaInline(err, "IP inválido. Verifique o formato."); return; }
+    if (!ip)            { mostrarAlertaEl(err, "Digite um IP para analisar."); return; }
+    if (!isValidIp(ip)) { mostrarAlertaEl(err, "IP inválido. Verifique o formato."); return; }
 
     btn.disabled    = true;
     btn.textContent = "Analisando...";
@@ -461,18 +493,14 @@
       if (r.status === 401) { logout(); return; }
 
       const data = await r.json();
-
-      if (!r.ok || !data.ok) {
-        mostrarAlertaInline(err, data.error || "Erro ao consultar o IP.");
-        return;
-      }
+      if (!r.ok || !data.ok) { mostrarAlertaEl(err, data.error || "Erro ao consultar o IP."); return; }
 
       ipAnalisado = data.result;
       renderAnalise(data.result);
       res.style.display = "block";
 
     } catch {
-      mostrarAlertaInline(err, "Não foi possível conectar ao Worker.");
+      mostrarAlertaEl(err, "Não foi possível conectar ao Worker.");
     } finally {
       btn.disabled    = false;
       btn.textContent = "Analisar";
@@ -489,33 +517,30 @@
     };
     document.getElementById("r-pill").innerHTML = pillMap[r.status] || "";
 
-    const score      = r.score ?? 0;
-    const scoreColor = score >= 75 ? "#ef4444" : score >= 25 ? "#f59e0b" : "#22c55e";
+    const score = r.score ?? 0;
+    const sc    = score >= 75 ? "#ef4444" : score >= 25 ? "#f59e0b" : "#22c55e";
     document.getElementById("r-score-wrap").innerHTML = `
       <div class="score-wrap">
-        <span style="font-weight:700;color:${scoreColor};">${score}/100</span>
-        <div class="score-track"><div class="score-fill" style="width:${score}%;background:${scoreColor};"></div></div>
+        <span style="font-weight:700;color:${sc};">${score}/100</span>
+        <div class="score-track"><div class="score-fill" style="width:${score}%;background:${sc};"></div></div>
       </div>`;
 
     document.getElementById("r-reports").textContent = r.total_reports ?? "—";
     document.getElementById("r-country").textContent = r.country || "—";
     document.getElementById("r-isp").textContent     = r.isp     || "—";
 
-    // Botão de bloqueio
-    const actionEl  = document.getElementById("block-action");
     const noteEl    = document.getElementById("block-note");
     const btnWrapEl = document.getElementById("block-btn-wrap");
 
     if (r.status === "limpo") {
-      noteEl.textContent    = "✅ IP considerado limpo. Nenhuma ação necessária.";
-      btnWrapEl.innerHTML   = "";
+      noteEl.textContent  = "✅ IP considerado limpo. Nenhuma ação necessária.";
+      btnWrapEl.innerHTML = "";
     } else {
-      const label = r.status === "malicioso" ? "⚠️ IP malicioso detectado. Recomenda-se bloqueio imediato." : "⚠️ IP suspeito. Avalie antes de bloquear.";
-      noteEl.textContent  = label;
+      noteEl.textContent  = r.status === "malicioso"
+        ? "⚠️ IP malicioso detectado. Recomenda-se bloqueio imediato."
+        : "⚠️ IP suspeito. Avalie antes de bloquear.";
       btnWrapEl.innerHTML = `<button class="btn-block" id="btn-bloquear-ip" onclick="bloquearIpAnalisado()">🚫 Bloquear este IP</button>`;
     }
-
-    actionEl.style.display = "flex";
   }
 
   async function bloquearIpAnalisado() {
@@ -530,28 +555,23 @@
       const r = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ senha: senhaAtual, action: "block", entries: ip })
+        body: JSON.stringify({ senha: senhaAtual, action: "block", entries: ip, analyst: analystName })
       });
 
       if (r.status === 401) { logout(); return; }
 
       const data = await r.json();
-
       if (!r.ok || !data.ok) {
         btn.disabled    = false;
         btn.textContent = "🚫 Bloquear este IP";
-        document.getElementById("analyze-error").textContent = data.error || "Erro ao bloquear.";
-        document.getElementById("analyze-error").style.display = "block";
+        mostrarAlertaEl(document.getElementById("analyze-error"), data.error || "Erro ao bloquear.");
         return;
       }
 
-      // Substitui botão por badge de sucesso
       document.getElementById("block-btn-wrap").innerHTML =
         `<span class="blocked-badge">✅ IP bloqueado com sucesso</span>`;
       document.getElementById("block-note").textContent =
-        `O IP ${ip} foi adicionado à feed. Firewalls serão atualizados em breve.`;
-
-      salvarHistorico([ip]);
+        `O IP ${ip} foi adicionado à feed e salvo no histórico.`;
 
     } catch {
       btn.disabled    = false;
@@ -571,7 +591,6 @@
 
   async function enviarLote() {
     const ips = extrairIps();
-
     esconderAlertasLote();
     document.getElementById("result-list").style.display = "none";
 
@@ -596,14 +615,16 @@
       const r = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ senha: senhaAtual, action: "block", entries: ips.join("\n") })
+        body: JSON.stringify({ senha: senhaAtual, action: "block", entries: ips.join("\n"), analyst: analystName })
       });
 
       pf.style.width = "90%";
-
       if (r.status === 401) { logout(); return; }
 
       const data = await r.json();
+      pf.style.width = "100%";
+      pl.textContent = "Concluído.";
+      setTimeout(() => { pw.style.display = "none"; }, 800);
 
       if (!r.ok) {
         document.getElementById("lote-error").textContent = data.error || "Erro ao enviar.";
@@ -611,14 +632,10 @@
         return;
       }
 
-      pf.style.width = "100%";
-      pl.textContent = "Concluído.";
-      setTimeout(() => { pw.style.display = "none"; }, 800);
-
       const { success, failed, results } = data;
 
       if (failed === 0) {
-        document.getElementById("lote-success").textContent = `✅ ${success} IP${success !== 1 ? "s" : ""} bloqueado${success !== 1 ? "s" : ""} com sucesso! Os firewalls serão atualizados em breve.`;
+        document.getElementById("lote-success").textContent = `✅ ${success} IP${success !== 1 ? "s" : ""} bloqueado${success !== 1 ? "s" : ""} com sucesso! Firewalls serão atualizados em breve.`;
         document.getElementById("lote-success").style.display = "block";
       } else if (success === 0) {
         document.getElementById("lote-error").textContent = `❌ Nenhum IP foi bloqueado. Verifique a conexão com a feed.`;
@@ -640,9 +657,6 @@
         document.getElementById("result-list").style.display = "block";
       }
 
-      const okIps = (results || []).filter(r => r.ok).map(r => r.ip);
-      if (okIps.length) salvarHistorico(okIps);
-
       document.getElementById("ip-input").value = "";
       document.getElementById("ip-counter").textContent = "0 IPs";
 
@@ -663,43 +677,62 @@
   }
 
   /* ══════════════════════════════
-     HISTÓRICO
+     HISTÓRICO KV (compartilhado)
   ══════════════════════════════ */
-  function getHistorico() {
-    try { return JSON.parse(localStorage.getItem(LS_HIST) || "[]"); } catch { return []; }
+  async function carregarHistorico() {
+    const metaEl  = document.getElementById("hist-meta");
+    const tbodyEl = document.getElementById("hist-tbody");
+
+    metaEl.textContent  = "Carregando...";
+    tbodyEl.innerHTML   = `<tr><td colspan="3"><div class="empty-hist">Buscando dados...</div></td></tr>`;
+
+    try {
+      const r = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senha: senhaAtual, action: "history" })
+      });
+
+      if (r.status === 401) { logout(); return; }
+
+      const data = await r.json();
+      if (!r.ok || !data.ok) {
+        metaEl.textContent  = "Erro ao carregar histórico.";
+        tbodyEl.innerHTML   = `<tr><td colspan="3"><div class="empty-hist">Erro ao carregar.</div></td></tr>`;
+        return;
+      }
+
+      histData = data.history || [];
+      metaEl.textContent = `${histData.length} IP${histData.length !== 1 ? "s" : ""} bloqueado${histData.length !== 1 ? "s" : ""} no total`;
+      renderTabelaHistorico(histData);
+
+    } catch {
+      metaEl.textContent = "Erro de conexão.";
+      tbodyEl.innerHTML  = `<tr><td colspan="3"><div class="empty-hist">Não foi possível conectar.</div></td></tr>`;
+    }
   }
 
-  function salvarHistorico(ips) {
-    const hist = getHistorico();
-    const now  = Date.now();
-    ips.forEach(ip => hist.unshift({ ip, ts: now }));
-    localStorage.setItem(LS_HIST, JSON.stringify(hist.slice(0, 200)));
-    renderHistorico();
+  function renderTabelaHistorico(list) {
+    const tbodyEl = document.getElementById("hist-tbody");
+
+    if (!list.length) {
+      tbodyEl.innerHTML = `<tr><td colspan="3"><div class="empty-hist">Nenhum IP bloqueado ainda.</div></td></tr>`;
+      return;
+    }
+
+    tbodyEl.innerHTML = list.map(h => `
+      <tr>
+        <td class="td-ip">${esc(h.ip)}</td>
+        <td class="td-analyst">${esc(h.analyst || "—")}</td>
+        <td class="td-time">${esc(h.ts_br || h.ts || "—")}</td>
+      </tr>`
+    ).join("");
   }
 
-  function renderHistorico() {
-    const hist = getHistorico();
-    const html = hist.length
-      ? hist.map(h => {
-          const dt   = new Date(h.ts);
-          const date = dt.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-          const time = dt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-          return `<div class="hist-item">
-            <span class="hist-ip">${esc(h.ip)}</span>
-            <span class="pill pill-ok" style="font-size:0.65rem;padding:2px 7px;"><span class="dot"></span>Bloqueado</span>
-            <span class="hist-time">${date} ${time}</span>
-          </div>`;
-        }).join("")
-      : '<div class="empty-hist">Nenhum IP bloqueado ainda.</div>';
-
-    document.getElementById("hist-list-a").innerHTML = html;
-    document.getElementById("hist-list-b").innerHTML = html;
-  }
-
-  function limparHistorico() {
-    if (!confirm("Limpar o histórico da sessão?")) return;
-    localStorage.removeItem(LS_HIST);
-    renderHistorico();
+  function filtrarHistorico() {
+    const q = document.getElementById("hist-search").value.trim().toLowerCase();
+    const filtered = q ? histData.filter(h => h.ip.includes(q) || (h.analyst || "").toLowerCase().includes(q)) : histData;
+    renderTabelaHistorico(filtered);
   }
 
   /* ══════════════════════════════
@@ -707,13 +740,10 @@
   ══════════════════════════════ */
   function extrairIps() {
     return document.getElementById("ip-input").value
-      .split(/[\n,;\s]+/)
-      .map(s => s.trim())
-      .filter(isValidIp)
-      .slice(0, 100);
+      .split(/[\n,;\s]+/).map(s => s.trim()).filter(isValidIp).slice(0, 100);
   }
 
-  function mostrarAlertaInline(el, msg) {
+  function mostrarAlertaEl(el, msg) {
     el.textContent   = msg;
     el.style.display = "block";
   }
@@ -725,9 +755,7 @@
   }
 
   function esc(t) {
-    return String(t || "")
-      .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-      .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    return String(t || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
   }
 </script>
 </body>
